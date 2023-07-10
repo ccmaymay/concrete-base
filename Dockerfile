@@ -51,11 +51,15 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y \
+        bison \
         build-essential \
         curl \
         default-jdk \
+        flex \
         git \
         libboost-all-dev \
+        libssl-dev \
+        pkg-config \
         python-is-python3 \
         python3 \
         python3-pip \
@@ -68,9 +72,9 @@ RUN pip install \
         git+https://chromium.googlesource.com/external/gyp \
         six
 
-RUN curl -O http://archive.apache.org/dist/thrift/0.17.0/thrift-0.17.0.tar.gz && \
-    tar xfz thrift-0.17.0.tar.gz && \
-    cd thrift-0.17.0 && \
+RUN git clone -b THRIFT-5674-stable https://github.com/ccmaymay/thrift.git thrift && \
+    cd thrift && \
+    ./bootstrap.sh && \
     ./configure --without-kotlin && \
     make && \
     make install
